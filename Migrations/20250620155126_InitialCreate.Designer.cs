@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LaptopInventoryAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250620114930_InitialCreate")]
+    [Migration("20250620155126_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -43,11 +43,15 @@ namespace LaptopInventoryAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 

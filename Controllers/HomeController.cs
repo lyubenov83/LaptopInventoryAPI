@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using LaptopInventoryAPI.Data;
 using LaptopInventoryAPI.Models;
+using LaptopInventoryAPI.Data;
+using System.Linq;
 
 namespace LaptopInventoryAPI.Controllers
 {
@@ -8,37 +9,55 @@ namespace LaptopInventoryAPI.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        // Inject ApplicationDbContext via constructor
         public HomeController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // Show empty form
+        // Display form + laptop list
         [HttpGet]
         public IActionResult Index()
         {
+            ViewBag.Laptops = _context.Laptops.ToList();
             return View();
         }
 
-        // Process form submission
+        // Handle form submission
         [HttpPost]
         public IActionResult Index(Laptop laptop)
         {
             if (ModelState.IsValid)
             {
-                _context.Laptops.Add(laptop);     // Add the new laptop entity
-                _context.SaveChanges();            // Save changes to the database
+                // ✅ Calculate Total Price based on UnitPrice and Quantity
+                laptop.TotalPrice = laptop.UnitPrice * laptop.Quantity;
+
+                _context.Laptops.Add(laptop);
+                _context.SaveChanges();
 
                 ViewBag.Message = "Laptop added successfully!";
-                ModelState.Clear();                // Clear form after successful submission
-                return View();
+                ModelState.Clear();
             }
-            else
+
+            ViewBag.Laptops = _context.Laptops.ToList(); // Refresh list
+            return View(new Laptop());
+        }
+
+        // ✅ Delete selected laptops
+        [HttpPost]
+        public IActionResult DeleteSelected(int[] selectedIds)
+        {
+            var laptopsToDelete = _context.Laptops.Where(l => selectedIds.Contains(l.Id)).ToList();
+
+            if (laptopsToDelete.Any())
             {
-                // If validation fails, return the form with validation messages
-                return View(laptop);
+                _context.Laptops.RemoveRange(laptopsToDelete);
+                _context.SaveChanges();
+
+                // ✅ Add a red alert message
+                TempData["DeleteMessage"] = "Laptop removed successfully!";
             }
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -4,24 +4,23 @@ namespace LaptopInventoryAPI.Models
 {
     public class Laptop
     {
-        [Key]
         public int Id { get; set; }
 
         [Required]
-        [Display(Name = "Brand")]
-        public string Brand { get; set; }
+        public string? Brand { get; set; }
 
         [Required]
-        [Display(Name = "Model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
-        [Display(Name = "Price")]
-        public decimal Price { get; set; }
+        [Required]
+        [Display(Name = "Unit Price")]
+        public decimal UnitPrice { get; set; }
 
-        [Display(Name = "Quantity")]
+        [Required]
         public int Quantity { get; set; }
 
-        [Display(Name = "In Stock")]
         public bool InStock { get; set; }
+
+        public decimal TotalPrice { get; set; }
     }
 }

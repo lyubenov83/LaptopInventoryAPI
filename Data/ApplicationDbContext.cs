@@ -17,8 +17,13 @@ namespace LaptopInventoryAPI.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Laptop>()
-                .Property(l => l.Price)
-                .HasColumnType("decimal(18,2)"); // define precision and scale for SQL decimal type
+                .Property(l => l.UnitPrice)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Laptop>()
+                .Property(l => l.TotalPrice)
+                .HasPrecision(18, 2); // Add this line to specify precision for TotalPrice
         }
+
     }
 }
