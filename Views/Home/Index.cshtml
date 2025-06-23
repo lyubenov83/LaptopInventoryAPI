@@ -1,0 +1,113 @@
+﻿@model LaptopInventoryAPI.Models.Laptop
+
+@{
+    ViewData["Title"] = "Add Laptop";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+@if (ViewBag.Message != null)
+{
+    <div class="fw-bold mb-3" style="color: green;">
+        @ViewBag.Message
+    </div>
+}
+
+
+
+@if (TempData["DeleteMessage"] != null)
+{
+    <div class="fw-bold mb-3" style="color: red;">
+        @TempData["DeleteMessage"]
+    </div>
+}
+
+
+
+
+<form asp-action="Index" method="post">
+    <div class="row mb-3">
+        <label asp-for="Brand" class="col-sm-2 col-form-label text-end"></label>
+        <div class="col-sm-6">
+            <input asp-for="Brand" class="form-control" />
+            <span asp-validation-for="Brand" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label asp-for="Model" class="col-sm-2 col-form-label text-end"></label>
+        <div class="col-sm-6">
+            <input asp-for="Model" class="form-control" />
+            <span asp-validation-for="Model" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label asp-for="UnitPrice" class="col-sm-2 col-form-label text-end"></label>
+        <div class="col-sm-6">
+            <input asp-for="UnitPrice" type="number" step="0.01" class="form-control" />
+            <span asp-validation-for="UnitPrice" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label asp-for="Quantity" class="col-sm-2 col-form-label text-end"></label>
+        <div class="col-sm-6">
+            <input asp-for="Quantity" type="number" class="form-control" />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-6">
+            <div class="form-check">
+                <input asp-for="InStock" class="form-check-input" type="checkbox" />
+                <label asp-for="InStock" class="form-check-label"></label>
+            </div>
+            <span asp-validation-for="InStock" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-6">
+            <button type="submit" class="btn btn-primary">Add Laptop</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+@if (ViewBag.Laptops != null && ViewBag.Laptops.Count > 0)
+{
+    <h3 class="mt-5">Saved Laptops</h3>
+
+    <form asp-action="DeleteSelected" method="post" onsubmit="return confirm('Are you sure you want to delete the selected item(s)?');">
+        <table class="table table-bordered table-striped table-hover mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>In Stock</th>
+                    <th>Select</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.Laptops)
+                {
+                    <tr>
+                        <td>@item.Brand</td>
+                        <td>@item.Model</td>
+                        <td>@item.UnitPrice.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.TotalPrice.ToString("C")</td>
+                        <td>@(item.InStock ? "Yes" : "No")</td>
+                        <td><input type="checkbox" name="selectedIds" value="@item.Id" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-danger">Delete Selected</button>
+    </form>
+}
