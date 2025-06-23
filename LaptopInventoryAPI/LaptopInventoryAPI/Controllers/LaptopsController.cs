@@ -9,9 +9,9 @@ namespace LaptopInventoryAPI.Controllers
     [Route("api/[controller]")]
     public class LaptopsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
 
-        public LaptopsController(ApplicationDbContext context)
+        public LaptopsController(AppDbContext context)
         {
             _context = context;
         }
