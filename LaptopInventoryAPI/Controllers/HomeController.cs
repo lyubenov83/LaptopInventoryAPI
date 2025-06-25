@@ -3,7 +3,7 @@ using LaptopInventoryAPI.Models;
 using LaptopInventoryAPI.Data;
 using System.Linq;
 
-namespace LaptopInventoryAPI.LaptopInventoryAPI.Controllers
+namespace LaptopInventoryAPI.Controllers
 {
     public class HomeController : Controller
     {

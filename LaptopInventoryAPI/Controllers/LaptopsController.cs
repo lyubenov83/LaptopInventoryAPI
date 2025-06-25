@@ -7,7 +7,7 @@ namespace LaptopInventoryAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LaptopsController : ControllerBase
+    public class LaptopsController : Controller
     {
         private readonly AppDbContext _context;
 
@@ -90,6 +90,16 @@ namespace LaptopInventoryAPI.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        // NEW WEB PAGE VIEW (NOT API)
+        // GET: /Laptops
+        [HttpGet("/Laptops")]
+        public async Task<IActionResult> IndexView()
+        {
+            var laptops = await _context.Laptops.ToListAsync();
+            ViewBag.Laptops = laptops;
+            return View("Index", new Laptop());
         }
     }
 }
